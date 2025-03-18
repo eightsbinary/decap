@@ -1,10 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [markdownContent, setMarkdownContent] = useState('');
+
+  useEffect(() => {
+    fetch(new URL('./content/blog/test.md', import.meta.url))
+      .then((response) => response.text())
+      .then((text) => setMarkdownContent(text));
+  }, []);
 
   return (
     <>
@@ -28,8 +37,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <ReactMarkdown children={markdownContent} remarkPlugins={[remarkGfm]} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
